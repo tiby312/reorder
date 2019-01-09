@@ -1,6 +1,6 @@
 [package]
 name = "reorder"
-version = "1.0.0"
+version = "1.0.1"
 authors = ["Ken Reed <kenakioreed@gmail.com>"]
 edition = "2018"
 description = "Reorder a slice based on a slice of indicies"
@@ -11,3 +11,4 @@ readme = "readme.md"
 
 
 [dependencies]
+unchecked-index = "0.2.2"
