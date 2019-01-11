@@ -12,3 +12,12 @@ readme = "readme.md"
 
 [dependencies]
 unchecked-index = "0.2.2"
+
+
+
+[dev-dependencies]
+rand = "0.6.4"
+
+
+[features]
+#unstable =[]

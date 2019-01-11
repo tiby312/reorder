@@ -6,35 +6,26 @@ extern crate unchecked_index;
 
 #[test]
 fn test(){
-    let mut v1=&mut [50,40,70,60,90];
-    let mut v2=&mut [3,0,4,1,2];
-
-
-    println!("input: \n arr={:?} \n indicies={:?}",v1,v2);
+    let mut v1=[50,40,70,60,90];
+    let mut v2=[3,0,4,1,2];
+    let mut a1=v1.clone();
+    let mut a2=v2.clone();
     
-    reorder_index(v1,v2);
+    reorder_index(&mut v1,&mut v2);
+    reorder_index_aux(&mut a1,&mut a2);
 
-  
+    for (a,b) in v1.iter().zip(a1.iter()){
+        assert_eq!(a,b);
+    }
 
-    println!("output: \n arr={:?} \n indicies={:?}",v1,v2);
-    panic!("fail");
+
+    for (a,b) in v2.iter().zip(a2.iter()){
+        assert_eq!(a,b);
+    }
+
 }
 
-//input
-// 41253
-//output
-// 01234
-//    
 
-#[test]
-fn swap_index_test(){
-    let mut v1=&mut [3,0,4,1,2];
-
-    println!("input={:?}",v1);
-    let k=swap_index(v1);
-    println!("output={:?}",k);
-    panic!("fail");
-}
 
 
 
@@ -54,6 +45,18 @@ pub fn swap_index(bla:impl ExactSizeIterator<Item=u32>)->Vec<u32>{
     vec
 }
 
+
+
+#[inline]
+pub fn reorder_index_aux<'a,A:Copy>(arr:&'a mut [A],index:&mut [u32]){
+    let mut v=Vec::new();
+    v.extend_from_slice(arr);
+
+    for (i,(a,index)) in v.iter().zip(index.iter_mut()).enumerate(){
+        arr[*index as usize]=*a;
+        *index=i as u32
+    }
+}
 
 
 #[inline]
