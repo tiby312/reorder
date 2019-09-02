@@ -1,6 +1,6 @@
 [package]
 name = "reorder"
-version = "1.0.2"
+version = "1.0.3"
 authors = ["Ken Reed <kenakioreed@gmail.com>"]
 edition = "2018"
 description = "Reorder a slice based on a slice of indicies"
@@ -9,15 +9,8 @@ repository = "https://github.com/tiby312/reorder"
 keywords = ["rank", "reorder"]
 readme = "readme.md"
 
-
 [dependencies]
-unchecked-index = "0.2.2"
-
-
 
 [dev-dependencies]
 rand = "0.6.4"
 
-
-[features]
-#unstable =[]
