@@ -10,12 +10,11 @@ fn test(){
     let mut v2=[3,0,4,1,2];
     let mut a1=v1.clone();
     let mut a2=v2.clone();
-    let mut b1=v1.clone();
-    let mut b2=v2.clone();
     
     
     reorder_index(&mut v1,&mut v2);
     reorder_index_aux(&mut a1,&mut a2);
+
 
     let mut bla=Vec::new();
     bla.extend_from_slice(&v1);
@@ -34,6 +33,8 @@ fn test(){
 }
 
 
+///
+/// # Safety
 ///
 /// Unsafe since the size of the size hint of the iterator is not
 /// guarenteed to be equal to the number of items produced by
@@ -59,7 +60,7 @@ pub unsafe fn swap_index(bla:impl ExactSizeIterator<Item=u32>)->Vec<u32>{
 
 
 #[inline]
-pub fn reorder_index_aux<'a,A>(arr:&mut [A],index:&mut [u32]){
+pub fn reorder_index_aux<A>(arr:&mut [A],index:&mut [u32]){
     
     
     let mut v=Vec::with_capacity(arr.len());
@@ -82,7 +83,7 @@ pub fn reorder_index_aux<'a,A>(arr:&mut [A],index:&mut [u32]){
 
 
 #[inline]
-pub fn reorder_index_aux_vec<'a,A>(mut arr:Vec<A>,index:&mut [u32])->Vec<A>{
+pub fn reorder_index_aux_vec<A>(mut arr:Vec<A>,index:&mut [u32])->Vec<A>{
     
     
     let mut v=Vec::with_capacity(arr.len());
@@ -101,7 +102,7 @@ pub fn reorder_index_aux_vec<'a,A>(mut arr:Vec<A>,index:&mut [u32])->Vec<A>{
 
 
 #[inline]
-pub fn reorder_index<'a,A>(arr:&'a mut [A],index:&mut [u32]){
+pub fn reorder_index<A>(arr:&mut [A],index:&mut [u32]){
 
     
     assert_eq!(arr.len(),index.len());
