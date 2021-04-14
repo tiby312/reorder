@@ -9,8 +9,7 @@ fn test() {
 
     reorder_index(&mut v1, &mut v2);
     reorder_index_aux(&mut a1, &mut a2);
-    dbg!(v1,a1);
-
+    dbg!(v1, a1);
 
     for (a, b) in v1.iter().zip(a1.iter()) {
         assert_eq!(a, b);
@@ -21,20 +20,19 @@ fn test() {
     }
 }
 
-
-pub fn reorder_index_aux<A:Clone+Default>(arr: &mut [A], index: &mut [usize]) {
-    let mut v=reorder_index_aux_vec(arr,index);
-    arr.clone_from_slice(&mut v);
+pub fn reorder_index_aux<A: Clone + Default>(arr: &mut [A], index: &mut [usize]) {
+    let v = reorder_index_aux_vec(arr, index);
+    arr.clone_from_slice(&v);
 }
 
-pub fn reorder_index_aux_vec<A:Clone+Default>(arr: &[A], index: &mut [usize]) -> Vec<A> {
-    assert_eq!(arr.len(),index.len());
-    
-    let mut res = vec![std::default::Default::default();arr.len()];
-    
-    for (i,(a,b)) in index.iter_mut().zip(arr.iter()).enumerate(){
-        res[*a]=b.clone();
-        *a=i;
+fn reorder_index_aux_vec<A: Clone + Default>(arr: &[A], index: &mut [usize]) -> Vec<A> {
+    assert_eq!(arr.len(), index.len());
+
+    let mut res = vec![std::default::Default::default(); arr.len()];
+
+    for (i, (a, b)) in index.iter_mut().zip(arr.iter()).enumerate() {
+        res[*a] = b.clone();
+        *a = i;
     }
     res
 }
