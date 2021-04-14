@@ -9,14 +9,11 @@ fn test() {
 
     reorder_index(&mut v1, &mut v2);
     reorder_index_aux(&mut a1, &mut a2);
+    dbg!(v1,a1);
 
-    let mut bla = Vec::new();
-    bla.extend_from_slice(&v1);
-    let a3: Vec<usize> = reorder_index_aux_vec(bla, &mut a2);
 
-    for ((a, b), c) in v1.iter().zip(a1.iter()).zip(a3.iter()) {
+    for (a, b) in v1.iter().zip(a1.iter()) {
         assert_eq!(a, b);
-        assert_eq!(b, c);
     }
 
     for (a, b) in v2.iter().zip(a2.iter()) {
@@ -24,94 +21,36 @@ fn test() {
     }
 }
 
-///
-/// # Safety
-///
-/// Unsafe since the size of the size hint of the iterator is not
-/// guarenteed to be equal to the number of items produced by
-/// the iterator.
-///
-/// The user must also guarentee that the provided iterator is a permutation
-/// of the indicies.
-///
-#[inline]
-pub unsafe fn swap_index(bla: impl ExactSizeIterator<Item = usize>) -> Vec<usize> {
-    let len = bla.len();
-    let mut vec = Vec::with_capacity(len);
-    let arr: &mut [usize] = std::slice::from_raw_parts_mut(vec.as_mut_ptr(), bla.len());
-    for (i, a) in bla.enumerate() {
-        arr[a] = i;
-    }
 
-    vec.set_len(len);
-
-    vec
+pub fn reorder_index_aux<A:Clone+Default>(arr: &mut [A], index: &mut [usize]) {
+    let mut v=reorder_index_aux_vec(arr,index);
+    arr.clone_from_slice(&mut v);
 }
 
-#[inline]
-pub fn reorder_index_aux<A>(arr: &mut [A], index: &mut [usize]) {
-    let mut v = Vec::with_capacity(arr.len());
-    unsafe {
-        std::ptr::copy_nonoverlapping(arr.as_ptr(), v.as_mut_ptr(), arr.len());
-        v.set_len(arr.len());
+pub fn reorder_index_aux_vec<A:Clone+Default>(arr: &[A], index: &mut [usize]) -> Vec<A> {
+    assert_eq!(arr.len(),index.len());
+    
+    let mut res = vec![std::default::Default::default();arr.len()];
+    
+    for (i,(a,b)) in index.iter_mut().zip(arr.iter()).enumerate(){
+        res[*a]=b.clone();
+        *a=i;
     }
-
-    for (i, (a, index)) in v.drain(..).zip(index.iter_mut()).enumerate() {
-        let res = core::mem::replace(&mut arr[*index], a);
-
-        *index = i;
-        core::mem::forget(res);
-    }
+    res
 }
 
-#[inline]
-pub fn reorder_index_aux_vec<A>(mut arr: Vec<A>, index: &mut [usize]) -> Vec<A> {
-    let mut v = Vec::with_capacity(arr.len());
-    unsafe { v.set_len(arr.len()) };
-    let vv = unsafe { std::slice::from_raw_parts_mut(v.as_mut_ptr(), v.len()) };
-
-    for (i, (a, index)) in arr.drain(..).zip(index.iter_mut()).enumerate() {
-        vv[*index] = a;
-        *index = i
-    }
-
-    v
-}
-
-use uninit::prelude::*;
-
-pub fn reorder_index<A>(arr: &mut [A], indices: &mut [usize]) {
-    assert_eq!(arr.len(), indices.len());
-
-    let arr: &mut [MaybeUninit<_>] = unsafe { arr.manually_drop_mut().as_out().as_mut_uninit() };
+pub fn reorder_index<T>(arr: &mut [T], index: &mut [usize]) {
+    assert_eq!(arr.len(), index.len());
+    // Fix elements one by one
+    // n.b.
+    //   The above assert and the nature of this loop are likely to eliminate
+    //   any bounds checks
     for i in 0..arr.len() {
-        while indices[i] != i {
-            let old_target_i = indices[indices[i]];
-
-            //let old_target_e = arr[index[i]];
-            let mut old_target_e = std::mem::MaybeUninit::<A>::uninit();
-            unsafe {
-                old_target_e
-                    .as_mut_ptr()
-                    .write(arr[indices[i]].as_ptr().read());
-            }
-
-            // arr[index[i]] = arr[i];
-            // Since the object arr[index[i]] is aliased to old_target_e, we cannot produce
-            // mutable reference to it nor assign to it.
-            unsafe {
-                arr[indices[i]].as_mut_ptr().write(arr[i].as_ptr().read());
-            }
-            // Now that old_target_e is not longer aliased, we can call assume_init
-            let old_target_e = unsafe { old_target_e.assume_init() };
-
-            indices[indices[i]] = indices[i];
-
-            indices[i] = old_target_i;
-
-            //arr[i] = old_target_e;
-            // arr[i] is aliased to arr[index[i]
-            arr[i].as_out().write(old_target_e);
+        let mut target = index[i];
+        while i != target {
+            index.swap(i, target);
+            arr.swap(i, target);
+            target = index[i];
         }
     }
 }
