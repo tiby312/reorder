@@ -1,9 +1,9 @@
 [package]
 name = "reorder"
-version = "2.0.0"
+version = "2.0.1"
 authors = ["Ken Reed <kenakioreed@gmail.com>"]
 edition = "2018"
-description = "Reorder a slice based on a slice of indicies"
+description = "Reorder a slice based on a slice of indices"
 license = "MIT/Apache-2.0"
 repository = "https://github.com/tiby312/reorder"
 keywords = ["rank", "reorder"]
