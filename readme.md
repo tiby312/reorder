@@ -4,6 +4,7 @@ Simple crate that will reorder a slice based on a slice of indices without an au
 
 Check it out on [crates.io](https://crates.io/crates/reorder) and [github](https://github.com/tiby312/reorder) and [docs.rs](https://docs.rs/reorder/).
 
+### Example
 
 ```rust
 #[test]
