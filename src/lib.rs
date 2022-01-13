@@ -4,9 +4,9 @@
 #[test]
 fn test() {
     let (mut arr, mut ind, res) = (
-        [50usize, 40, 70, 60, 90],
-        [3usize, 0, 4, 1, 2],
-        [40, 60, 90, 50, 70],
+        [50, 40, 70, 60, 90, 10],
+        [3, 0, 4, 1, 2, 5],
+        [40, 60, 90, 50, 70, 10],
     );
     reorder_index(&mut arr, &mut ind);
     assert_eq!(arr, res);
@@ -15,9 +15,9 @@ fn test() {
 #[test]
 fn test_aux() {
     let (mut arr, mut ind, res) = (
-        [50usize, 40, 70, 60, 90],
-        [3usize, 0, 4, 1, 2],
-        [40, 60, 90, 50, 70],
+        [50, 40, 70, 60, 90, 10],
+        [3, 0, 4, 1, 2, 5],
+        [40, 60, 90, 50, 70, 10],
     );
     reorder_index_aux(&mut arr, &mut ind);
     assert_eq!(arr, res);
