@@ -8,9 +8,10 @@ Check it out on [crates.io](https://crates.io/crates/reorder) and [github](https
 
 ```rust
 fn main() {
+    
     let (mut arr, mut ind, res) = (
         [50, 40, 70, 60, 90, 10],
-        [3, 0, 4, 1, 2, 5],
+        [03, 00, 04, 01, 02, 05],
         [40, 60, 90, 50, 70, 10],
     );
     reorder_index(&mut arr, &mut ind);
